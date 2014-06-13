@@ -16,7 +16,7 @@ function RainyDay(options, canvas) {
 		blur: 10,
 		crop: [0, 0, this.img.naturalWidth, this.img.naturalHeight],
 		enableSizeChange: true,
-		parentElement: document.getElementsByTagName('body')[0],
+		parentElement: document.getElementsByClassName('canvasrain')[0],
 		fps: 30,
 		fillStyle: '#8ED6FF',
 		enableCollisions: true,
@@ -45,7 +45,7 @@ function RainyDay(options, canvas) {
 
 	// prepare canvas elements
 	this.canvas = canvas || this.prepareCanvas();
-	this.prepareBackground();
+	this.prepareBackground(this.canvas.width, this.canvas.height);
 	this.prepareGlass();
 
 	// assume defaults
@@ -70,7 +70,7 @@ RainyDay.prototype.prepareCanvas = function() {
 	canvas.width = this.options.width;
 	canvas.height = this.options.height;
 	this.options.parentElement.appendChild(canvas);
-	if (this.options.enableSizeChange) {
+	if (this.enableSizeChange) {
 		this.setResizeHandler();
 	}
 	return canvas;
@@ -100,9 +100,9 @@ RainyDay.prototype.checkSize = function() {
 	var canvasOffsetTop = this.canvas.offsetTop;
 
 	if (canvasWidth !== clientWidth || canvasHeight !== clientHeight) {
-		this.canvas.width = clientWidth;
-		this.canvas.height = clientHeight;
-		this.prepareBackground();
+		this.canvas.width = this.canvas.width;
+		this.canvas.height = this.canvas.height;
+		this.prepareBackground(this.canvas.width, this.canvas.height);
 		this.glass.width = this.canvas.width;
 		this.glass.height = this.canvas.height;
 		this.prepareReflections();
@@ -243,7 +243,7 @@ RainyDay.prototype.rain = function(presets, speed) {
 			this.putDrop(new Drop(this, Math.random() * this.canvas.width, Math.random() * this.canvas.height, preset[0], preset[1]));
 		}
 		context.save();
-		context.globalAlpha = this.options.opacity;
+		context.globalAlpha = this.opacity;
 		context.drawImage(this.glass, 0, 0, this.canvas.width, this.canvas.height);
 		context.restore();
 	}
